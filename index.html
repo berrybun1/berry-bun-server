@@ -23,18 +23,42 @@
             position: relative;
         }
 
-        /* Login Modal */
+        .login-btn-corner {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: linear-gradient(135deg, #ff69b4, #ff1493);
+            color: white;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: 600;
+            z-index: 100;
+            box-shadow: 0 4px 15px rgba(255, 105, 180, 0.4);
+            transition: all 0.3s ease;
+        }
+
+        .login-btn-corner:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(255, 105, 180, 0.6);
+        }
+
         .login-modal {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: linear-gradient(135deg, #ffd6e8 0%, #fff9e6 50%, #e6f3ff 100%);
-            display: flex;
+            background: rgba(0, 0, 0, 0.5);
+            display: none;
             justify-content: center;
             align-items: center;
             z-index: 1000;
+        }
+
+        .login-modal.active {
+            display: flex;
         }
 
         .login-container {
@@ -45,6 +69,18 @@
             max-width: 400px;
             width: 90%;
             text-align: center;
+            position: relative;
+        }
+
+        .close-login {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #d4478a;
         }
 
         .login-title {
@@ -90,7 +126,7 @@
             border-color: #ff69b4;
         }
 
-        .login-btn {
+        .login-submit-btn {
             width: 100%;
             padding: 1rem;
             background: linear-gradient(135deg, #ff69b4, #ff1493);
@@ -103,7 +139,7 @@
             transition: all 0.3s ease;
         }
 
-        .login-btn:hover {
+        .login-submit-btn:hover {
             transform: translateY(-2px);
         }
 
@@ -118,8 +154,23 @@
             display: block;
         }
 
-        .main-content {
-            position: relative;
+        .admin-logout-btn {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #f44336;
+            color: white;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: 600;
+            z-index: 100;
+            display: none;
+        }
+
+        .admin-logout-btn.show {
+            display: block;
         }
 
         .navbar {
@@ -249,6 +300,11 @@
             border-radius: 10px;
             cursor: pointer;
             font-weight: 600;
+            display: none;
+        }
+
+        .edit-toggle-btn.admin {
+            display: block;
         }
 
         .stats-grid {
@@ -348,6 +404,7 @@
             padding: 1.5rem;
             border-radius: 20px;
             margin-bottom: 1.5rem;
+            position: relative;
         }
 
         .announcement-text {
@@ -355,6 +412,21 @@
             color: #d4478a;
             font-weight: 600;
             margin-bottom: 1rem;
+        }
+
+        .edit-announcement-btn {
+            display: none;
+        }
+
+        .edit-announcement-btn.admin {
+            display: inline-block;
+            background: linear-gradient(135deg, #ff69b4, #ff1493);
+            color: white;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 15px;
+            cursor: pointer;
+            font-weight: 600;
         }
 
         .join-btn {
@@ -480,16 +552,6 @@
             margin-top: 1rem;
         }
 
-        .edit-btn {
-            background: linear-gradient(135deg, #ff69b4, #ff1493);
-            color: white;
-            border: none;
-            padding: 0.8rem 1.5rem;
-            border-radius: 15px;
-            cursor: pointer;
-            font-weight: 600;
-        }
-
         .how-to-grind {
             background: rgba(255, 255, 255, 0.85);
             padding: 2rem;
@@ -542,14 +604,32 @@
         .pro-tips li {
             margin-bottom: 0.8rem;
         }
+
+        @media (max-width: 768px) {
+            .main-title {
+                font-size: 2.5rem;
+            }
+
+            .status-card {
+                flex-direction: column;
+            }
+
+            .login-btn-corner, .admin-logout-btn {
+                padding: 0.6rem 1rem;
+                font-size: 0.9rem;
+            }
+        }
     </style>
 </head>
 <body>
-    <!-- Login Modal -->
+    <button class="login-btn-corner" onclick="openLoginModal()">🎀 Admin Login</button>
+    <button class="admin-logout-btn" onclick="handleLogout()">Logout</button>
+
     <div id="loginModal" class="login-modal">
         <div class="login-container">
-            <h1 class="login-title">🍓 Berry Bun 🍓</h1>
-            <p class="login-subtitle">Enter to access the grind server</p>
+            <button class="close-login" onclick="closeLoginModal()">✕</button>
+            <h1 class="login-title">🍓 Admin Login 🍓</h1>
+            <p class="login-subtitle">Edit announcements & status</p>
             
             <form id="loginForm">
                 <div class="form-group">
@@ -562,184 +642,181 @@
                     <input type="password" id="password" placeholder="••••••••" required>
                 </div>
                 
-                <button type="submit" class="login-btn">🎀 Enter 🎀</button>
+                <button type="submit" class="login-submit-btn">🎀 Login 🎀</button>
                 <p id="loginError" class="login-error"></p>
             </form>
         </div>
     </div>
 
-    <!-- Main Content -->
-    <div id="mainContent" class="main-content" style="display: none;">
-        <nav class="navbar">
-            <div class="nav-content">
-                <h1 class="logo">🍓 Berry Bun</h1>
-                <ul class="nav-links">
-                    <li><a href="#home">Home</a></li>
-                    <li><a href="#status">Status</a></li>
-                    <li><a href="#rules">Rules</a></li>
-                    <li><a href="#join">Join</a></li>
-                    <li><a href="#" onclick="handleLogout()">Logout</a></li>
+    <nav class="navbar">
+        <div class="nav-content">
+            <h1 class="logo">🍓 Berry Bun</h1>
+            <ul class="nav-links">
+                <li><a href="#home">Home</a></li>
+                <li><a href="#status">Status</a></li>
+                <li><a href="#rules">Rules</a></li>
+                <li><a href="#join">Join</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <section id="home" class="hero">
+        <h1 class="main-title">✨ Berry Bun ✨</h1>
+        <p class="subtitle">A cute & aesthetic Adopt Me grinding server</p>
+        <p class="subtitle">Part of The AFK Corner Community 🌟</p>
+    </section>
+
+    <section id="status" class="status-section">
+        <h2>Server Status</h2>
+        <div class="status-card">
+            <div class="status-light" id="statusLight"></div>
+            <p class="status-text" id="statusText">Checking status...</p>
+            <button class="edit-toggle-btn" onclick="toggleEditStatus()">✏️ Edit Status</button>
+        </div>
+        
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-icon">👥</div>
+                <div class="stat-label">Players Grinding</div>
+                <div class="stat-value" id="playerCount">0/15</div>
+            </div>
+            
+            <div class="stat-card">
+                <div class="stat-icon">💺</div>
+                <div class="stat-label">Seats Available</div>
+                <div class="stat-value" id="seatsAvailable">15</div>
+            </div>
+            
+            <div class="stat-card">
+                <div class="stat-icon">🎮</div>
+                <div class="stat-label">Server Type</div>
+                <div class="stat-value">Mega Grind</div>
+            </div>
+        </div>
+    </section>
+
+    <section id="rules" class="rules-section">
+        <h2>🌟 Berry Bun Rules ♡ 🌟</h2>
+        
+        <div class="rules-grid">
+            <div class="rule-card">
+                <div class="rule-number">01</div>
+                <h3>NO TRADING AT ALL</h3>
+                <p>Trading is strictly not allowed in grind servers!</p>
+            </div>
+            <div class="rule-card">
+                <div class="rule-number">02</div>
+                <h3>NO AFK BABIES</h3>
+                <p>No AFK babies allowed — actively playing is okay!</p>
+            </div>
+            <div class="rule-card">
+                <div class="rule-number">03</div>
+                <h3>ONE FAMILY ONLY</h3>
+                <p>Everyone must be in ONE family!</p>
+            </div>
+            <div class="rule-card">
+                <div class="rule-number">04</div>
+                <h3>NO ORANGE TASKS</h3>
+                <p>No orange tasks allowed!</p>
+            </div>
+            <div class="rule-card">
+                <div class="rule-number">05</div>
+                <h3>AFK = SEATED ONLY</h3>
+                <p>Must sit in a proper seat!</p>
+            </div>
+            <div class="rule-card">
+                <div class="rule-number">06</div>
+                <h3>MOBILE USERS</h3>
+                <p>Change name to "AFK"!</p>
+            </div>
+            <div class="rule-card">
+                <div class="rule-number">07</div>
+                <h3>GRIND HOUSE LOCATION</h3>
+                <p>Main plot near Hospital & Nursery!</p>
+            </div>
+            <div class="rule-card">
+                <div class="rule-number">08</div>
+                <h3>NO HIDING</h3>
+                <p>Use proper seats only!</p>
+            </div>
+            <div class="rule-card">
+                <div class="rule-number">09</div>
+                <h3>WAIT FOR SEATS</h3>
+                <p>Don't force your way in!</p>
+            </div>
+            <div class="rule-card">
+                <div class="rule-number">10</div>
+                <h3>BE KIND & RESPECTFUL</h3>
+                <p>Treat everyone with kindness!</p>
+            </div>
+            <div class="rule-card">
+                <div class="rule-number">11</div>
+                <h3>NO HARASSMENT</h3>
+                <p>Keep it friendly and chill!</p>
+            </div>
+            <div class="rule-card">
+                <div class="rule-number">12</div>
+                <h3>RESPECT THE HOST</h3>
+                <p>Follow their instructions!</p>
+            </div>
+            <div class="rule-card">
+                <div class="rule-number">13</div>
+                <h3>CONSEQUENCES</h3>
+                <p>Warning, kick, or ban! 🎀</p>
+            </div>
+        </div>
+
+        <div class="how-to-grind">
+            <h3>📋 How to Join & Start Grinding</h3>
+            <ol class="steps">
+                <li><strong>Find an Open Server</strong> - Look for the green badge!</li>
+                <li><strong>Click Join Server</strong> - You'll go directly to Roblox!</li>
+                <li><strong>Travel to Grind House</strong> - Main plot near Hospital & Nursery!</li>
+                <li><strong>Accept Family Invite</strong> - Set family permissions to "Everyone"!</li>
+                <li><strong>Find Available Seat</strong> - Make sure a seat is open before AFK!</li>
+            </ol>
+
+            <div class="pro-tips">
+                <h4>✨ Pro Tips:</h4>
+                <ul>
+                    <li>✓ Set Adopt Me family to "Everyone"</li>
+                    <li>✓ Follow host instructions</li>
+                    <li>✓ Grab healing apples near hospital!</li>
+                    <li>✓ Be patient — good vibes only! 🌸</li>
                 </ul>
             </div>
-        </nav>
+        </div>
+    </section>
 
-        <section id="home" class="hero">
-            <h1 class="main-title">✨ Berry Bun ✨</h1>
-            <p class="subtitle">A cute & aesthetic Adopt Me grinding server</p>
-            <p class="subtitle">Part of The AFK Corner Community 🌟</p>
-        </section>
+    <section id="join" class="join-section">
+        <h2>Join Berry Bun</h2>
+        <p>Ready to grind? Let's get that XP! 🌟</p>
+        
+        <div class="announcement-box">
+            <div class="announcement-text" id="announcement">📢 🎀 Server is OPEN! Join now! ✨</div>
+            <button class="edit-announcement-btn" onclick="toggleEditAnnouncement()">✏️ Edit Announcement</button>
+        </div>
+        
+        <a href="https://www.roblox.com/share?code=4da6e629966d834fa3ed440be3fb2e4b&type=Server" class="join-btn" target="_blank">
+            🎀 Join Server Now 🎀
+        </a>
+        
+        <p style="margin-top: 2rem; color: #9b7b9e;">or copy the server code:</p>
+        <div class="code-container">
+            <code>4da6e629966d834fa3ed440be3fb2e4b</code>
+            <button class="copy-btn" onclick="copyCode()">📋 Copy</button>
+        </div>
+    </section>
 
-        <section id="status" class="status-section">
-            <h2>Server Status</h2>
-            <div class="status-card">
-                <div class="status-light" id="statusLight"></div>
-                <p class="status-text" id="statusText">Checking status...</p>
-                <button class="edit-toggle-btn" onclick="toggleEditStatus()">✏️ Edit Status</button>
-            </div>
-            
-            <div class="stats-grid">
-                <div class="stat-card">
-                    <div class="stat-icon">👥</div>
-                    <div class="stat-label">Players Grinding</div>
-                    <div class="stat-value" id="playerCount">0/15</div>
-                </div>
-                
-                <div class="stat-card">
-                    <div class="stat-icon">💺</div>
-                    <div class="stat-label">Seats Available</div>
-                    <div class="stat-value" id="seatsAvailable">15</div>
-                </div>
-                
-                <div class="stat-card">
-                    <div class="stat-icon">🎮</div>
-                    <div class="stat-label">Server Type</div>
-                    <div class="stat-value">Mega Grind</div>
-                </div>
-            </div>
-        </section>
-
-        <section id="rules" class="rules-section">
-            <h2>🌟 The AFK Corner - Server Rules 🌟</h2>
-            
-            <div class="rules-grid">
-                <div class="rule-card">
-                    <div class="rule-number">01</div>
-                    <h3>NO TRADING AT ALL</h3>
-                    <p>Trading is strictly not allowed in grind servers!</p>
-                </div>
-                <div class="rule-card">
-                    <div class="rule-number">02</div>
-                    <h3>NO AFK BABIES</h3>
-                    <p>No AFK babies allowed — actively playing is okay!</p>
-                </div>
-                <div class="rule-card">
-                    <div class="rule-number">03</div>
-                    <h3>ONE FAMILY ONLY</h3>
-                    <p>Everyone must be in ONE family!</p>
-                </div>
-                <div class="rule-card">
-                    <div class="rule-number">04</div>
-                    <h3>NO ORANGE TASKS</h3>
-                    <p>No orange tasks allowed!</p>
-                </div>
-                <div class="rule-card">
-                    <div class="rule-number">05</div>
-                    <h3>AFK = SEATED ONLY</h3>
-                    <p>Must sit in a proper seat!</p>
-                </div>
-                <div class="rule-card">
-                    <div class="rule-number">06</div>
-                    <h3>MOBILE USERS</h3>
-                    <p>Change name to "AFK"!</p>
-                </div>
-                <div class="rule-card">
-                    <div class="rule-number">07</div>
-                    <h3>GRIND HOUSE LOCATION</h3>
-                    <p>Main plot near Hospital & Nursery!</p>
-                </div>
-                <div class="rule-card">
-                    <div class="rule-number">08</div>
-                    <h3>NO HIDING</h3>
-                    <p>Use proper seats only!</p>
-                </div>
-                <div class="rule-card">
-                    <div class="rule-number">09</div>
-                    <h3>WAIT FOR SEATS</h3>
-                    <p>Don't force your way in!</p>
-                </div>
-                <div class="rule-card">
-                    <div class="rule-number">10</div>
-                    <h3>BE KIND & RESPECTFUL</h3>
-                    <p>Treat everyone with kindness!</p>
-                </div>
-                <div class="rule-card">
-                    <div class="rule-number">11</div>
-                    <h3>NO HARASSMENT</h3>
-                    <p>Keep it friendly and chill!</p>
-                </div>
-                <div class="rule-card">
-                    <div class="rule-number">12</div>
-                    <h3>RESPECT THE HOST</h3>
-                    <p>Follow their instructions!</p>
-                </div>
-                <div class="rule-card">
-                    <div class="rule-number">13</div>
-                    <h3>CONSEQUENCES</h3>
-                    <p>Warning, kick, or ban! 🎀</p>
-                </div>
-            </div>
-
-            <div class="how-to-grind">
-                <h3>📋 How to Join & Start Grinding</h3>
-                <ol class="steps">
-                    <li><strong>Find an Open Server</strong> - Look for the green badge!</li>
-                    <li><strong>Click Join Server</strong> - You'll go directly to Roblox!</li>
-                    <li><strong>Travel to Grind House</strong> - Main plot near Hospital & Nursery!</li>
-                    <li><strong>Accept Family Invite</strong> - Set family permissions to "Everyone"!</li>
-                    <li><strong>Find Available Seat</strong> - Make sure a seat is open before AFK!</li>
-                </ol>
-
-                <div class="pro-tips">
-                    <h4>✨ Pro Tips:</h4>
-                    <ul>
-                        <li>✓ Set Adopt Me family to "Everyone"</li>
-                        <li>✓ Follow host instructions</li>
-                        <li>✓ Grab healing apples near hospital!</li>
-                        <li>✓ Be patient — good vibes only! 🌸</li>
-                    </ul>
-                </div>
-            </div>
-        </section>
-
-        <section id="join" class="join-section">
-            <h2>Join Berry Bun</h2>
-            <p>Ready to grind? Let's get that XP! 🌟</p>
-            
-            <div class="announcement-box">
-                <div class="announcement-text" id="announcement">📢 🎀 Server is OPEN! Join now! ✨</div>
-                <button class="edit-btn" onclick="toggleEditAnnouncement()">✏️ Edit Announcement</button>
-            </div>
-            
-            <a href="https://www.roblox.com/share?code=4da6e629966d834fa3ed440be3fb2e4b&type=Server" class="join-btn" target="_blank">
-                🎀 Join Server Now 🎀
-            </a>
-            
-            <p style="margin-top: 2rem; color: #9b7b9e;">or copy the server code:</p>
-            <div class="code-container">
-                <code>4da6e629966d834fa3ed440be3fb2e4b</code>
-                <button class="copy-btn" onclick="copyCode()">📋 Copy</button>
-            </div>
-        </section>
-
-        <footer class="footer">
-            <p>🍓 Berry Bun Adopt Me Server - Part of The AFK Corner 🍓</p>
-            <p>Made with love, cuteness & grinding vibes ✨</p>
-        </footer>
-    </div>
+    <footer class="footer">
+        <p>🍓 Berry Bun Adopt Me Server - Part of The AFK Corner 🍓</p>
+        <p>Made with love, cuteness & grinding vibes ✨</p>
+    </footer>
 
     <script>
         const VALID_USERNAME = "Rio";
         const VALID_PASSWORD = "stefanshi";
+        let isAdmin = false;
 
         let serverStatusData = {
             status: 'open',
@@ -753,15 +830,26 @@
             message: '🎀 Server is OPEN! Join now! ✨'
         };
 
-        // Login
+        function openLoginModal() {
+            document.getElementById('loginModal').classList.add('active');
+        }
+
+        function closeLoginModal() {
+            document.getElementById('loginModal').classList.remove('active');
+        }
+
         document.getElementById('loginForm').addEventListener('submit', function(e) {
             e.preventDefault();
             const username = document.getElementById('username').value;
             const password = document.getElementById('password').value;
 
             if (username === VALID_USERNAME && password === VALID_PASSWORD) {
-                sessionStorage.setItem('berryBunLoggedIn', 'true');
-                loadApp();
+                isAdmin = true;
+                sessionStorage.setItem('berryBunAdmin', 'true');
+                closeLoginModal();
+                showAdminControls();
+                document.getElementById('username').value = '';
+                document.getElementById('password').value = '';
             } else {
                 const errorMsg = document.getElementById('loginError');
                 errorMsg.textContent = '❌ Incorrect! Try Rio / stefanshi';
@@ -770,11 +858,22 @@
             }
         });
 
-        function loadApp() {
-            document.getElementById('loginModal').style.display = 'none';
-            document.getElementById('mainContent').style.display = 'block';
-            loadServerStatus();
-            loadAnnouncement();
+        function showAdminControls() {
+            document.querySelector('.login-btn-corner').style.display = 'none';
+            document.querySelector('.admin-logout-btn').classList.add('show');
+            document.querySelectorAll('.edit-toggle-btn').forEach(btn => btn.classList.add('admin'));
+            document.querySelector('.edit-announcement-btn').classList.add('admin');
+        }
+
+        function handleLogout() {
+            isAdmin = false;
+            sessionStorage.removeItem('berryBunAdmin');
+            document.querySelector('.login-btn-corner').style.display = 'block';
+            document.querySelector('.admin-logout-btn').classList.remove('show');
+            document.querySelectorAll('.edit-toggle-btn').forEach(btn => btn.classList.remove('admin'));
+            document.querySelector('.edit-announcement-btn').classList.remove('admin');
+            document.querySelector('.status-card').classList.remove('edit-mode');
+            document.querySelector('.announcement-box').classList.remove('edit-mode');
             updateDisplay();
         }
 
@@ -823,6 +922,7 @@
         }
 
         function toggleEditStatus() {
+            if (!isAdmin) return;
             const statusCard = document.querySelector('.status-card');
             if (statusCard.classList.contains('edit-mode')) {
                 statusCard.classList.remove('edit-mode');
@@ -873,6 +973,7 @@
         }
 
         function toggleEditAnnouncement() {
+            if (!isAdmin) return;
             const announcementBox = document.querySelector('.announcement-box');
             if (announcementBox.classList.contains('edit-mode')) {
                 announcementBox.classList.remove('edit-mode');
@@ -914,15 +1015,14 @@
             });
         }
 
-        function handleLogout() {
-            sessionStorage.removeItem('berryBunLoggedIn');
-            location.reload();
-        }
-
-        // Check if logged in on load
         window.addEventListener('load', function() {
-            if (sessionStorage.getItem('berryBunLoggedIn')) {
-                loadApp();
+            loadServerStatus();
+            loadAnnouncement();
+            updateDisplay();
+
+            if (sessionStorage.getItem('berryBunAdmin')) {
+                isAdmin = true;
+                showAdminControls();
             }
         });
     </script>
