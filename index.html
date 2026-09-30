@@ -23,27 +23,85 @@
             position: relative;
         }
 
-        /* Floating decorations */
-        .decoration {
+        .stars, .clouds {
             position: fixed;
-            font-size: 2rem;
-            opacity: 0.1;
+            inset: 0;
             pointer-events: none;
-            z-index: 1;
-            animation: float 6s ease-in-out infinite;
+            z-index: 0;
         }
 
-        @keyframes float {
-            0%, 100% { transform: translateY(0px) rotate(0deg); }
-            50% { transform: translateY(-20px) rotate(10deg); }
+        .stars::before,
+        .stars::after {
+            content: '✦ ✦ ✦ ✦ ✦ ✦ ✦ ✦';
+            position: absolute;
+            inset: 0;
+            color: rgba(255,255,255,0.8);
+            font-size: 1.4rem;
+            letter-spacing: 2rem;
+            animation: twinkle 6s linear infinite;
         }
 
-        .deco1 { top: 10%; left: 5%; animation-delay: 0s; }
-        .deco2 { top: 20%; right: 10%; animation-delay: 1s; }
-        .deco3 { top: 40%; left: 15%; animation-delay: 2s; }
-        .deco4 { top: 50%; right: 5%; animation-delay: 3s; }
-        .deco5 { top: 70%; left: 10%; animation-delay: 4s; }
-        .deco6 { top: 80%; right: 15%; animation-delay: 5s; }
+        .stars::after {
+            transform: translateY(50px);
+            opacity: 0.7;
+            animation-delay: 1.5s;
+        }
+
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 1; }
+        }
+
+        .clouds::before,
+        .clouds::after {
+            content: '☁ ☁ ☁';
+            position: absolute;
+            color: rgba(255,255,255,0.6);
+            font-size: 4rem;
+            letter-spacing: 1rem;
+            animation: drift 20s linear infinite;
+        }
+
+        .clouds::before {
+            left: -10%;
+            top: 10%;
+        }
+
+        .clouds::after {
+            right: -10%;
+            top: 30%;
+            animation-delay: 8s;
+        }
+
+        @keyframes drift {
+            0% { transform: translateX(0); }
+            50% { transform: translateX(10vw); }
+            100% { transform: translateX(0); }
+        }
+
+        .heart {
+            position: fixed;
+            font-size: 1.2rem;
+            color: rgba(255,105,180,0.6);
+            opacity: 0.8;
+            z-index: 0;
+            animation: floatHeart 10s ease-in-out infinite;
+            pointer-events: none;
+        }
+
+        @keyframes floatHeart {
+            0% { transform: translateY(20px) scale(0.8); opacity: 0; }
+            20% { opacity: 0.8; }
+            50% { transform: translateY(-20px) scale(1); }
+            100% { transform: translateY(-60px) scale(0.8); opacity: 0; }
+        }
+
+        .deco1 { top: 12%; left: 8%; }
+        .deco2 { top: 18%; right: 10%; animation-delay: 1s; }
+        .deco3 { top: 38%; left: 14%; animation-delay: 2s; }
+        .deco4 { top: 52%; right: 18%; animation-delay: 3s; }
+        .deco5 { top: 72%; left: 10%; animation-delay: 4s; }
+        .deco6 { top: 82%; right: 12%; animation-delay: 5s; }
 
         .login-btn-corner {
             position: fixed;
@@ -92,6 +150,7 @@
             width: 90%;
             text-align: center;
             position: relative;
+            border: 3px solid rgba(255, 182, 193, 0.6);
         }
 
         .close-login {
@@ -201,6 +260,7 @@
             position: relative;
             z-index: 10;
             border-bottom: 3px solid #ff69b4;
+            box-shadow: 0 8px 25px rgba(255, 105, 180, 0.15);
         }
 
         .nav-content {
@@ -245,8 +305,9 @@
             text-align: center;
             background: rgba(255, 255, 255, 0.8);
             border-radius: 30px;
-            border: 3px solid rgba(255, 182, 193, 0.5);
+            border: 3px solid rgba(255, 182, 193, 0.6);
             position: relative;
+            box-shadow: 0 10px 30px rgba(255, 105, 180, 0.12);
         }
 
         .hero::before {
@@ -330,7 +391,8 @@
             gap: 2rem;
             margin-bottom: 2rem;
             position: relative;
-            border: 2px solid rgba(255, 182, 193, 0.5);
+            border: 2px solid rgba(255, 182, 193, 0.6);
+            box-shadow: 0 10px 20px rgba(255, 136, 190, 0.12);
         }
 
         .status-card.edit-mode {
@@ -344,6 +406,7 @@
             border-radius: 50%;
             background: #4CAF50;
             animation: pulse 2s ease-in-out infinite;
+            box-shadow: 0 0 20px rgba(76,175,80,0.6);
         }
 
         .status-light.closed {
@@ -390,12 +453,14 @@
             padding: 1.5rem;
             border-radius: 20px;
             text-align: center;
-            border: 2px solid rgba(255, 105, 180, 0.2);
-            transition: transform 0.3s ease;
+            border: 2px solid rgba(255, 105, 180, 0.25);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            box-shadow: 0 10px 20px rgba(255, 105, 180, 0.1);
         }
 
         .stat-card:hover {
             transform: translateY(-5px);
+            box-shadow: 0 15px 25px rgba(255, 105, 180, 0.2);
         }
 
         .stat-icon {
@@ -460,6 +525,17 @@
             border-radius: 20px;
             border: 2px solid rgba(255, 182, 193, 0.5);
             transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .rule-card::before {
+            content: '🍓';
+            position: absolute;
+            right: 10px;
+            top: 10px;
+            opacity: 0.1;
+            font-size: 2rem;
         }
 
         .rule-card:hover {
@@ -478,6 +554,7 @@
             line-height: 50px;
             font-weight: 800;
             margin-bottom: 1rem;
+            box-shadow: 0 8px 18px rgba(255, 105, 180, 0.3);
         }
 
         .rule-card h3 {
@@ -518,7 +595,8 @@
             border-radius: 20px;
             margin-bottom: 1.5rem;
             position: relative;
-            border: 2px solid rgba(255, 182, 193, 0.5);
+            border: 2px solid rgba(255, 182, 193, 0.6);
+            box-shadow: 0 8px 20px rgba(255, 105, 180, 0.08);
         }
 
         .announcement-text {
@@ -556,11 +634,12 @@
             border: none;
             cursor: pointer;
             transition: all 0.3s ease;
+            box-shadow: 0 10px 25px rgba(255, 105, 180, 0.25);
         }
 
         .join-btn:hover {
             transform: translateY(-3px);
-            box-shadow: 0 8px 20px rgba(255, 105, 180, 0.4);
+            box-shadow: 0 12px 25px rgba(255, 105, 180, 0.35);
         }
 
         .code-container {
@@ -601,6 +680,7 @@
             color: #6b4e71;
             margin-top: 4rem;
             border-top: 3px solid #ff69b4;
+            box-shadow: 0 -8px 25px rgba(255, 105, 180, 0.08);
         }
 
         .footer::before {
@@ -688,6 +768,7 @@
             padding: 2rem;
             border-radius: 25px;
             border: 2px solid rgba(255, 182, 193, 0.5);
+            box-shadow: 0 10px 20px rgba(255, 105, 180, 0.08);
         }
 
         .how-to-grind h3 {
@@ -758,13 +839,14 @@
     </style>
 </head>
 <body>
-    <!-- Floating decorations -->
-    <div class="decoration deco1">🐰</div>
-    <div class="decoration deco2">🍓</div>
-    <div class="decoration deco3">🐰</div>
-    <div class="decoration deco4">🍓</div>
-    <div class="decoration deco5">🐰</div>
-    <div class="decoration deco6">🍓</div>
+    <div class="stars"></div>
+    <div class="clouds"></div>
+    <div class="heart deco1">♥</div>
+    <div class="heart deco2">♥</div>
+    <div class="heart deco3">♥</div>
+    <div class="heart deco4">♥</div>
+    <div class="heart deco5">♥</div>
+    <div class="heart deco6">♥</div>
 
     <button class="login-btn-corner" onclick="openLoginModal()">🎀 Admin Login</button>
     <button class="admin-logout-btn" onclick="handleLogout()">Logout</button>
@@ -794,7 +876,7 @@
 
     <nav class="navbar">
         <div class="nav-content">
-            <h1 class="logo">🍓 Berry Bun 🐰</h1>
+            <h1 class="logo">🐰 Berry Bun 🍓</h1>
             <ul class="nav-links">
                 <li><a href="#home">Home</a></li>
                 <li><a href="#status">Status</a></li>
@@ -805,7 +887,7 @@
     </nav>
 
     <section id="home" class="hero">
-        <h1 class="main-title">✨ Berry Bun ✨</h1>
+        <h1 class="main-title">🐰 Berry Bun ✨</h1>
         <p class="subtitle">A cute & aesthetic Adopt Me grinding server</p>
         <p class="subtitle-special">Join in for helping others in this one aesthetic community ♡</p>
     </section>
@@ -1049,17 +1131,25 @@
             statusLight.classList.remove('closed');
             if (serverStatusData.status === 'open') {
                 statusLight.style.background = '#4CAF50';
+                statusLight.style.boxShadow = '0 0 20px rgba(76,175,80,0.6)';
                 statusText.innerHTML = '🟢 Server is OPEN ✨ 🌸';
             } else if (serverStatusData.status === 'closed') {
                 statusLight.style.background = '#f44336';
+                statusLight.style.boxShadow = '0 0 20px rgba(244,67,54,0.6)';
                 statusText.innerHTML = '🔴 Server is CLOSED 💔';
             } else if (serverStatusData.status === 'opening') {
                 statusLight.style.background = '#FFC107';
+                statusLight.style.boxShadow = '0 0 20px rgba(255,193,7,0.6)';
                 const timeStr = serverStatusData.timeValue ? `${serverStatusData.timeValue} ${serverStatusData.timeUnit}` : 'soon';
                 statusText.innerHTML = `🟡 Opening in ${timeStr}... ⏰`;
+            } else if (serverStatusData.status === 'closing') {
+                statusLight.style.background = '#FF8A65';
+                statusLight.style.boxShadow = '0 0 20px rgba(255,138,101,0.6)';
+                const timeStr = serverStatusData.timeValue ? `${serverStatusData.timeValue} ${serverStatusData.timeUnit}` : 'soon';
+                statusText.innerHTML = `🟠 Server closing in ${timeStr}... ⏳`;
             }
 
-            const seats = serverStatusData.maxPlayers - serverStatusData.players;
+            const seats = Math.max(0, serverStatusData.maxPlayers - serverStatusData.players);
             playerCount.textContent = `${serverStatusData.players}/${serverStatusData.maxPlayers} 👥`;
             seatsAvailable.textContent = `${seats} 💺`;
             announcement.textContent = '📢 ' + announcementData.message;
@@ -1082,9 +1172,10 @@
                                 <option value="open" ${serverStatusData.status === 'open' ? 'selected' : ''}>🟢 OPEN</option>
                                 <option value="closed" ${serverStatusData.status === 'closed' ? 'selected' : ''}>🔴 CLOSED</option>
                                 <option value="opening" ${serverStatusData.status === 'opening' ? 'selected' : ''}>🟡 OPENING IN...</option>
+                                <option value="closing" ${serverStatusData.status === 'closing' ? 'selected' : ''}>🟠 CLOSING IN...</option>
                             </select>
                         </div>
-                        <div id="timeInputs" style="display: ${serverStatusData.status === 'opening' ? 'flex' : 'none'};" class="edit-status-group">
+                        <div id="timeInputs" style="display: ${serverStatusData.status === 'opening' || serverStatusData.status === 'closing' ? 'flex' : 'none'};" class="edit-status-group">
                             <input type="number" id="timeValue" min="1" value="${serverStatusData.timeValue}" placeholder="Enter number">
                             <select id="timeUnit">
                                 <option value="hours" ${serverStatusData.timeUnit === 'hours' ? 'selected' : ''}>Hours ⏰</option>
@@ -1100,7 +1191,7 @@
                     </div>
                 `;
                 document.getElementById('statusSelect').addEventListener('change', function() {
-                    document.getElementById('timeInputs').style.display = this.value === 'opening' ? 'flex' : 'none';
+                    document.getElementById('timeInputs').style.display = (this.value === 'opening' || this.value === 'closing') ? 'flex' : 'none';
                 });
             }
         }
