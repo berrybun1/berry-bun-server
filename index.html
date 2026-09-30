@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Berry Bun - Adopt Me Server</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="stars"></div>
+    <div class="clouds"></div>
+    
+    <nav class="navbar">
+        <div class="nav-content">
+            <h1 class="logo">🍓 Berry Bun</h1>
+            <ul class="nav-links">
+                <li><a href="#home">Home</a></li>
+                <li><a href="#status">Status</a></li>
+                <li><a href="#join">Join</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <section id="home" class="hero">
+        <div class="hero-content">
+            <div class="title-container">
+                <h1 class="main-title">✨ Berry Bun ✨</h1>
+                <p class="subtitle">A cute & aesthetic Adopt Me grinding server</p>
+            </div>
+            
+            <div class="berries">
+                <span class="berry">🍓</span>
+                <span class="berry">🫐</span>
+                <span class="berry">🍓</span>
+            </div>
+        </div>
+    </section>
+
+    <section id="status" class="status-section">
+        <h2>Server Status</h2>
+        <div class="status-container">
+            <div class="status-card">
+                <div class="status-icon">
+                    <div class="status-light" id="statusLight"></div>
+                </div>
+                <p class="status-text" id="statusText">Checking status...</p>
+            </div>
+            
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon">👥</div>
+                    <div class="stat-info">
+                        <p class="stat-label">Players Online</p>
+                        <p class="stat-value" id="playerCount">Loading...</p>
+                    </div>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-icon">🎮</div>
+                    <div class="stat-info">
+                        <p class="stat-label">Server Type</p>
+                        <p class="stat-value">Grinding</p>
+                    </div>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-icon">✨</div>
+                    <div class="stat-info">
+                        <p class="stat-label">Vibe</p>
+                        <p class="stat-value">Cutecore</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="join" class="join-section">
+        <h2>Join Berry Bun</h2>
+        <p class="join-description">Ready to join our cute grinding community? Click below!</p>
+        
+        <div class="join-button-container">
+            <a href="https://www.roblox.com/share?code=4da6e629966d834fa3ed440be3fb2e4b&type=Server" 
+               class="join-btn" target="_blank">
+                🎀 Join Server Now 🎀
+            </a>
+        </div>
+        
+        <p class="join-note">or copy the server code:</p>
+        <div class="code-container">
+            <code>4da6e629966d834fa3ed440be3fb2e4b</code>
+            <button class="copy-btn" onclick="copyCode()">📋 Copy</button>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <p>🍓 Berry Bun Adopt Me Server 🍓</p>
+        <p>Made with love & aesthetic vibes ✨</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
