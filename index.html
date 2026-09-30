@@ -7,95 +7,240 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="stars"></div>
-    <div class="clouds"></div>
-    
-    <nav class="navbar">
-        <div class="nav-content">
-            <h1 class="logo">🍓 Berry Bun</h1>
-            <ul class="nav-links">
-                <li><a href="#home">Home</a></li>
-                <li><a href="#status">Status</a></li>
-                <li><a href="#join">Join</a></li>
-            </ul>
-        </div>
-    </nav>
-
-    <section id="home" class="hero">
-        <div class="hero-content">
-            <div class="title-container">
-                <h1 class="main-title">✨ Berry Bun ✨</h1>
-                <p class="subtitle">A cute & aesthetic Adopt Me grinding server</p>
-            </div>
-            
-            <div class="berries">
-                <span class="berry">🍓</span>
-                <span class="berry">🫐</span>
-                <span class="berry">🍓</span>
-            </div>
-        </div>
-    </section>
-
-    <section id="status" class="status-section">
-        <h2>Server Status</h2>
-        <div class="status-container">
-            <div class="status-card">
-                <div class="status-icon">
-                    <div class="status-light" id="statusLight"></div>
-                </div>
-                <p class="status-text" id="statusText">Checking status...</p>
-            </div>
-            
-            <div class="stats-grid">
-                <div class="stat-card">
-                    <div class="stat-icon">👥</div>
-                    <div class="stat-info">
-                        <p class="stat-label">Players Online</p>
-                        <p class="stat-value" id="playerCount">Loading...</p>
+    <!-- Login Modal -->
+    <div id="loginModal" class="login-modal">
+        <div class="login-container">
+            <div class="login-content">
+                <h1 class="login-title">🍓 Berry Bun 🍓</h1>
+                <p class="login-subtitle">Enter to access the grind server</p>
+                
+                <form id="loginForm" onsubmit="handleLogin(event)">
+                    <div class="form-group">
+                        <label for="username">Username</label>
+                        <input type="text" id="username" placeholder="Rio" required>
                     </div>
+                    
+                    <div class="form-group">
+                        <label for="password">Password</label>
+                        <input type="password" id="password" placeholder="••••••••" required>
+                    </div>
+                    
+                    <button type="submit" class="login-btn">🎀 Enter 🎀</button>
+                    <p id="loginError" class="login-error"></p>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content (Hidden until login) -->
+    <div id="mainContent" class="main-content" style="display: none;">
+        <div class="stars"></div>
+        <div class="clouds"></div>
+        
+        <nav class="navbar">
+            <div class="nav-content">
+                <h1 class="logo">🍓 Berry Bun</h1>
+                <ul class="nav-links">
+                    <li><a href="#home">Home</a></li>
+                    <li><a href="#status">Status</a></li>
+                    <li><a href="#rules">Rules</a></li>
+                    <li><a href="#join">Join</a></li>
+                    <li><a href="#" onclick="handleLogout()">Logout</a></li>
+                </ul>
+            </div>
+        </nav>
+
+        <section id="home" class="hero">
+            <div class="hero-content">
+                <div class="title-container">
+                    <h1 class="main-title">✨ Berry Bun ✨</h1>
+                    <p class="subtitle">A cute & aesthetic Adopt Me grinding server</p>
+                    <p class="subtitle-secondary">Part of The AFK Corner Community 🌟</p>
                 </div>
                 
-                <div class="stat-card">
-                    <div class="stat-icon">🎮</div>
-                    <div class="stat-info">
-                        <p class="stat-label">Server Type</p>
-                        <p class="stat-value">Grinding</p>
+                <div class="berries">
+                    <span class="berry">🍓</span>
+                    <span class="berry">🫐</span>
+                    <span class="berry">🍓</span>
+                </div>
+            </div>
+        </section>
+
+        <section id="status" class="status-section">
+            <h2>Server Status</h2>
+            <div class="status-container">
+                <div class="status-card">
+                    <div class="status-icon">
+                        <div class="status-light" id="statusLight"></div>
                     </div>
+                    <p class="status-text" id="statusText">Checking status...</p>
                 </div>
                 
-                <div class="stat-card">
-                    <div class="stat-icon">✨</div>
-                    <div class="stat-info">
-                        <p class="stat-label">Vibe</p>
-                        <p class="stat-value">Cutecore</p>
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon">👥</div>
+                        <div class="stat-info">
+                            <p class="stat-label">Players Grinding</p>
+                            <p class="stat-value" id="playerCount">Loading...</p>
+                        </div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-icon">🎮</div>
+                        <div class="stat-info">
+                            <p class="stat-label">Server Type</p>
+                            <p class="stat-value">Mega Grind</p>
+                        </div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-icon">✨</div>
+                        <div class="stat-info">
+                            <p class="stat-label">Vibe</p>
+                            <p class="stat-value">Cutecore</p>
+                        </div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-icon">💺</div>
+                        <div class="stat-info">
+                            <p class="stat-label">Seats Available</p>
+                            <p class="stat-value" id="seatsAvailable">Loading...</p>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-    </section>
+        </section>
 
-    <section id="join" class="join-section">
-        <h2>Join Berry Bun</h2>
-        <p class="join-description">Ready to join our cute grinding community? Click below!</p>
-        
-        <div class="join-button-container">
-            <a href="https://www.roblox.com/share?code=4da6e629966d834fa3ed440be3fb2e4b&type=Server" 
-               class="join-btn" target="_blank">
-                🎀 Join Server Now 🎀
-            </a>
-        </div>
-        
-        <p class="join-note">or copy the server code:</p>
-        <div class="code-container">
-            <code>4da6e629966d834fa3ed440be3fb2e4b</code>
-            <button class="copy-btn" onclick="copyCode()">📋 Copy</button>
-        </div>
-    </section>
+        <section id="rules" class="rules-section">
+            <h2>🌟 The AFK Corner - Server Rules 🌟</h2>
+            <p class="rules-intro">Welcome to Berry Bun! We're part of The AFK Corner community. Please follow these essential rules to keep our grinding sessions smooth and fun for everyone!</p>
+            
+            <div class="rules-grid">
+                <div class="rule-card">
+                    <div class="rule-number">01</div>
+                    <h3>NO TRADING AT ALL</h3>
+                    <p>Trading is strictly not allowed in grind servers. Save that for the main game!</p>
+                </div>
 
-    <footer class="footer">
-        <p>🍓 Berry Bun Adopt Me Server 🍓</p>
-        <p>Made with love & aesthetic vibes ✨</p>
-    </footer>
+                <div class="rule-card">
+                    <div class="rule-number">02</div>
+                    <h3>NO AFK BABIES</h3>
+                    <p>No AFK babies allowed — actively playing is okay, but AFK babies will result in a kick!</p>
+                </div>
+
+                <div class="rule-card">
+                    <div class="rule-number">03</div>
+                    <h3>ONE FAMILY ONLY</h3>
+                    <p>Everyone must be in ONE family — do not create multiple families or try to separate.</p>
+                </div>
+
+                <div class="rule-card">
+                    <div class="rule-number">04</div>
+                    <h3>NO ORANGE TASKS</h3>
+                    <p>No orange tasks — short breaks for Pet Shop/Golden Apples are okay, but no tasks!</p>
+                </div>
+
+                <div class="rule-card">
+                    <div class="rule-number">05</div>
+                    <h3>AFK = SEATED ONLY</h3>
+                    <p>If you're AFK, you MUST be sitting in a proper seat. Standing AFK is not allowed!</p>
+                </div>
+
+                <div class="rule-card">
+                    <div class="rule-number">06</div>
+                    <h3>MOBILE USERS</h3>
+                    <p>Mobile users: change your name to "AFK" and make sure you follow all seating rules!</p>
+                </div>
+
+                <div class="rule-card">
+                    <div class="rule-number">07</div>
+                    <h3>GRIND HOUSE LOCATION</h3>
+                    <p>The grind house is always on the main plot near the Hospital & Nursery. Head there first!</p>
+                </div>
+
+                <div class="rule-card">
+                    <div class="rule-number">08</div>
+                    <h3>NO HIDING</h3>
+                    <p>No hiding behind trees, treadmills or anywhere you shouldn't be. Use proper seats only!</p>
+                </div>
+
+                <div class="rule-card">
+                    <div class="rule-number">09</div>
+                    <h3>WAIT FOR SEATS</h3>
+                    <p>Join the family and wait for an open seat before grinding. Don't force your way in!</p>
+                </div>
+
+                <div class="rule-card">
+                    <div class="rule-number">10</div>
+                    <h3>BE KIND & RESPECTFUL</h3>
+                    <p>Treat everyone with kindness and positivity. We're all here to have fun and grind together!</p>
+                </div>
+
+                <div class="rule-card">
+                    <div class="rule-number">11</div>
+                    <h3>NO HARASSMENT</h3>
+                    <p>No harassment, bullying, or drama of any kind. Keep it friendly and chill!</p>
+                </div>
+
+                <div class="rule-card">
+                    <div class="rule-number">12</div>
+                    <h3>RESPECT THE HOST</h3>
+                    <p>Respect the host and follow their instructions at all times. They keep things running!</p>
+                </div>
+
+                <div class="rule-card">
+                    <div class="rule-number">13</div>
+                    <h3>CONSEQUENCES</h3>
+                    <p>Rule breaking may result in a warning, kick, or ban. Keep it chill! 🎀</p>
+                </div>
+            </div>
+
+            <div class="how-to-grind">
+                <h3>📋 How to Join & Start Grinding</h3>
+                <ol class="steps">
+                    <li><strong>Find an Open Server</strong> - Look for the green "Open" badge below</li>
+                    <li><strong>Click Join Server</strong> - You'll be taken directly to the Roblox server</li>
+                    <li><strong>Travel to the Grind House</strong> - It's on the main plot near Hospital & Nursery</li>
+                    <li><strong>Accept the Family Invite</strong> - Wait for an active grinder to invite you (set family to "Everyone")</li>
+                    <li><strong>Find an Available Seat</strong> - Make sure a seat is open before going AFK!</li>
+                </ol>
+
+                <div class="pro-tips">
+                    <h4>✨ Pro Tips:</h4>
+                    <ul>
+                        <li>✓ Set your Adopt Me family permissions to "Everyone"</li>
+                        <li>✓ Follow host instructions for smoothest experience</li>
+                        <li>✓ Grab healing apples near the hospital!</li>
+                        <li>✓ Be patient — good vibes only! 🌸</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <section id="join" class="join-section">
+            <h2>Join Berry Bun</h2>
+            <p class="join-description">Ready to join our cute grinding community? Let's get that XP! 🌟</p>
+            
+            <div class="join-button-container">
+                <a href="https://www.roblox.com/share?code=4da6e629966d834fa3ed440be3fb2e4b&type=Server" 
+                   class="join-btn" target="_blank">
+                    🎀 Join Server Now 🎀
+                </a>
+            </div>
+            
+            <p class="join-note">or copy the server code:</p>
+            <div class="code-container">
+                <code>4da6e629966d834fa3ed440be3fb2e4b</code>
+                <button class="copy-btn" onclick="copyCode()">📋 Copy</button>
+            </div>
+        </section>
+
+        <footer class="footer">
+            <p>🍓 Berry Bun Adopt Me Server - Part of The AFK Corner 🍓</p>
+            <p>Made with love, cuteness & grinding vibes ✨</p>
+        </footer>
+    </div>
 
     <script src="script.js"></script>
 </body>
