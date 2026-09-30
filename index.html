@@ -3,43 +3,573 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate, max-age=0">
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
-    <title>Berry Bun - Adopt Me Server</title>
-    <link rel="stylesheet" href="style.css?v=2.0">
+    <title>🍓 Berry Bun - Adopt Me Server</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #ffd6e8 0%, #fff9e6 50%, #e6f3ff 100%);
+            color: #6b4e71;
+            overflow-x: hidden;
+            min-height: 100vh;
+            position: relative;
+        }
+
+        /* Login Modal */
+        .login-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #ffd6e8 0%, #fff9e6 50%, #e6f3ff 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .login-container {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 3rem;
+            border-radius: 30px;
+            box-shadow: 0 20px 60px rgba(212, 71, 138, 0.3);
+            max-width: 400px;
+            width: 90%;
+            text-align: center;
+        }
+
+        .login-title {
+            font-size: 2.5rem;
+            background: linear-gradient(135deg, #ff69b4, #ff1493);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 1rem;
+            font-weight: 800;
+        }
+
+        .login-subtitle {
+            font-size: 1rem;
+            color: #9b7b9e;
+            margin-bottom: 2rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+            text-align: left;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            color: #d4478a;
+            margin-bottom: 0.5rem;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 0.8rem;
+            border: 2px solid #ffb3d9;
+            border-radius: 15px;
+            font-size: 1rem;
+            background: rgba(255, 182, 193, 0.1);
+            color: #6b4e71;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #ff69b4;
+        }
+
+        .login-btn {
+            width: 100%;
+            padding: 1rem;
+            background: linear-gradient(135deg, #ff69b4, #ff1493);
+            color: white;
+            border: none;
+            border-radius: 15px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .login-btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .login-error {
+            color: #f44336;
+            font-size: 0.9rem;
+            margin-top: 1rem;
+            display: none;
+        }
+
+        .login-error.show {
+            display: block;
+        }
+
+        .main-content {
+            position: relative;
+        }
+
+        .navbar {
+            background: linear-gradient(90deg, #ffb3d9 0%, #ffe6f0 100%);
+            padding: 1.5rem 0;
+            position: relative;
+            z-index: 10;
+        }
+
+        .nav-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #d4478a;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            color: #6b4e71;
+            text-decoration: none;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .nav-links a:hover {
+            color: #ff69b4;
+        }
+
+        .hero {
+            max-width: 1200px;
+            margin: 4rem auto;
+            padding: 3rem 2rem;
+            text-align: center;
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 30px;
+        }
+
+        .main-title {
+            font-size: 4rem;
+            background: linear-gradient(135deg, #ff69b4, #ff1493);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 1rem;
+            font-weight: 800;
+        }
+
+        .subtitle {
+            font-size: 1.3rem;
+            color: #9b7b9e;
+            margin-bottom: 1rem;
+        }
+
+        .status-section {
+            max-width: 1200px;
+            margin: 4rem auto;
+            padding: 2rem;
+        }
+
+        .status-section h2 {
+            text-align: center;
+            color: #d4478a;
+            margin-bottom: 2rem;
+            font-size: 2rem;
+        }
+
+        .status-card {
+            background: rgba(255, 255, 255, 0.85);
+            padding: 2rem;
+            border-radius: 25px;
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+            margin-bottom: 2rem;
+            position: relative;
+        }
+
+        .status-card.edit-mode {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .status-light {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: #4CAF50;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        .status-light.closed {
+            background: #f44336;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+
+        .status-text {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #6b4e71;
+        }
+
+        .edit-toggle-btn {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: linear-gradient(135deg, #ff69b4, #ff1493);
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .stat-card {
+            background: rgba(255, 182, 193, 0.3);
+            padding: 1.5rem;
+            border-radius: 20px;
+            text-align: center;
+        }
+
+        .stat-icon {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            color: #9b7b9e;
+            font-weight: 500;
+        }
+
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #d4478a;
+            margin-top: 0.5rem;
+        }
+
+        .rules-section {
+            max-width: 1200px;
+            margin: 4rem auto;
+            padding: 2rem;
+        }
+
+        .rules-section h2 {
+            text-align: center;
+            color: #d4478a;
+            margin-bottom: 2rem;
+            font-size: 2rem;
+        }
+
+        .rules-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .rule-card {
+            background: rgba(255, 255, 255, 0.85);
+            padding: 1.5rem;
+            border-radius: 20px;
+        }
+
+        .rule-number {
+            display: inline-block;
+            background: linear-gradient(135deg, #ff69b4, #ff1493);
+            color: white;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 50px;
+            font-weight: 800;
+            margin-bottom: 1rem;
+        }
+
+        .rule-card h3 {
+            color: #d4478a;
+            margin-bottom: 0.5rem;
+        }
+
+        .rule-card p {
+            color: #6b4e71;
+            line-height: 1.6;
+        }
+
+        .join-section {
+            max-width: 1200px;
+            margin: 4rem auto;
+            padding: 2rem;
+            text-align: center;
+        }
+
+        .join-section h2 {
+            color: #d4478a;
+            margin-bottom: 1rem;
+            font-size: 2rem;
+        }
+
+        .announcement-box {
+            background: rgba(255, 255, 255, 0.85);
+            padding: 1.5rem;
+            border-radius: 20px;
+            margin-bottom: 1.5rem;
+        }
+
+        .announcement-text {
+            font-size: 1.2rem;
+            color: #d4478a;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .join-btn {
+            display: inline-block;
+            background: linear-gradient(135deg, #ff69b4, #ff1493);
+            color: white;
+            padding: 1.2rem 2.5rem;
+            border-radius: 30px;
+            text-decoration: none;
+            font-size: 1.2rem;
+            font-weight: 700;
+            margin: 1rem 0;
+            border: none;
+            cursor: pointer;
+        }
+
+        .join-btn:hover {
+            transform: translateY(-3px);
+        }
+
+        .code-container {
+            background: rgba(255, 255, 255, 0.85);
+            padding: 1.5rem;
+            border-radius: 20px;
+            display: inline-flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        code {
+            font-family: 'Courier New', monospace;
+            color: #d4478a;
+            font-weight: 600;
+        }
+
+        .copy-btn {
+            background: linear-gradient(135deg, #ffc0cb, #ffb3d9);
+            border: none;
+            padding: 0.7rem 1.2rem;
+            border-radius: 15px;
+            cursor: pointer;
+            font-weight: 600;
+            color: #6b4e71;
+        }
+
+        .footer {
+            background: linear-gradient(90deg, #ffb3d9 0%, #ffe6f0 100%);
+            padding: 2rem;
+            text-align: center;
+            color: #6b4e71;
+            margin-top: 4rem;
+        }
+
+        .edit-announcement-form textarea {
+            width: 100%;
+            padding: 1rem;
+            border: 2px solid #ffb3d9;
+            border-radius: 15px;
+            font-size: 1rem;
+            min-height: 100px;
+            font-family: inherit;
+        }
+
+        .edit-announcement-buttons {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .save-btn, .cancel-btn {
+            flex: 1;
+            padding: 0.8rem;
+            border: none;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .save-btn {
+            background: #4CAF50;
+            color: white;
+        }
+
+        .cancel-btn {
+            background: #ccc;
+            color: #333;
+        }
+
+        .edit-status-container {
+            width: 100%;
+        }
+
+        .edit-status-group {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .edit-status-group input,
+        .edit-status-group select {
+            padding: 0.7rem;
+            border: 2px solid #ffb3d9;
+            border-radius: 10px;
+            background: rgba(255, 182, 193, 0.1);
+            color: #6b4e71;
+        }
+
+        .edit-status-group input:focus,
+        .edit-status-group select:focus {
+            outline: none;
+            border-color: #ff69b4;
+        }
+
+        .save-status-btn {
+            background: #4CAF50;
+            color: white;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 600;
+            margin-top: 1rem;
+        }
+
+        .edit-btn {
+            background: linear-gradient(135deg, #ff69b4, #ff1493);
+            color: white;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 15px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        .how-to-grind {
+            background: rgba(255, 255, 255, 0.85);
+            padding: 2rem;
+            border-radius: 25px;
+        }
+
+        .how-to-grind h3 {
+            color: #d4478a;
+            margin-bottom: 1.5rem;
+        }
+
+        .steps {
+            list-style: none;
+            margin-bottom: 2rem;
+        }
+
+        .steps li {
+            margin-bottom: 1rem;
+            padding-left: 2rem;
+            position: relative;
+            color: #6b4e71;
+            line-height: 1.8;
+        }
+
+        .steps li::before {
+            content: '✓';
+            position: absolute;
+            left: 0;
+            color: #ff69b4;
+            font-weight: bold;
+        }
+
+        .pro-tips {
+            background: rgba(255, 182, 193, 0.2);
+            padding: 1.5rem;
+            border-radius: 15px;
+            border-left: 4px solid #ff69b4;
+        }
+
+        .pro-tips h4 {
+            color: #d4478a;
+            margin-bottom: 1rem;
+        }
+
+        .pro-tips ul {
+            list-style: none;
+            color: #6b4e71;
+        }
+
+        .pro-tips li {
+            margin-bottom: 0.8rem;
+        }
+    </style>
 </head>
 <body>
     <!-- Login Modal -->
     <div id="loginModal" class="login-modal">
         <div class="login-container">
-            <div class="login-content">
-                <h1 class="login-title">🍓 Berry Bun 🍓</h1>
-                <p class="login-subtitle">Enter to access the grind server</p>
+            <h1 class="login-title">🍓 Berry Bun 🍓</h1>
+            <p class="login-subtitle">Enter to access the grind server</p>
+            
+            <form id="loginForm">
+                <div class="form-group">
+                    <label>Username</label>
+                    <input type="text" id="username" placeholder="Rio" required>
+                </div>
                 
-                <form id="loginForm" onsubmit="handleLogin(event)">
-                    <div class="form-group">
-                        <label for="username">Username</label>
-                        <input type="text" id="username" placeholder="Rio" required>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="password">Password</label>
-                        <input type="password" id="password" placeholder="••••••••" required>
-                    </div>
-                    
-                    <button type="submit" class="login-btn">🎀 Enter 🎀</button>
-                    <p id="loginError" class="login-error"></p>
-                </form>
-            </div>
+                <div class="form-group">
+                    <label>Password</label>
+                    <input type="password" id="password" placeholder="••••••••" required>
+                </div>
+                
+                <button type="submit" class="login-btn">🎀 Enter 🎀</button>
+                <p id="loginError" class="login-error"></p>
+            </form>
         </div>
     </div>
 
-    <!-- Main Content (Hidden until login) -->
+    <!-- Main Content -->
     <div id="mainContent" class="main-content" style="display: none;">
-        <div class="stars"></div>
-        <div class="clouds"></div>
-        
         <nav class="navbar">
             <div class="nav-content">
                 <h1 class="logo">🍓 Berry Bun</h1>
@@ -54,167 +584,127 @@
         </nav>
 
         <section id="home" class="hero">
-            <div class="hero-content">
-                <div class="title-container">
-                    <h1 class="main-title">✨ Berry Bun ✨</h1>
-                    <p class="subtitle">A cute & aesthetic Adopt Me grinding server</p>
-                    <p class="subtitle-secondary">Part of The AFK Corner Community 🌟</p>
-                </div>
-                
-                <div class="berries">
-                    <span class="berry">🍓</span>
-                    <span class="berry">🫐</span>
-                    <span class="berry">🍓</span>
-                </div>
-            </div>
+            <h1 class="main-title">✨ Berry Bun ✨</h1>
+            <p class="subtitle">A cute & aesthetic Adopt Me grinding server</p>
+            <p class="subtitle">Part of The AFK Corner Community 🌟</p>
         </section>
 
         <section id="status" class="status-section">
             <h2>Server Status</h2>
-            <div class="status-container">
-                <div class="status-card">
-                    <div class="status-icon">
-                        <div class="status-light" id="statusLight"></div>
-                    </div>
-                    <p class="status-text" id="statusText">Checking status...</p>
+            <div class="status-card">
+                <div class="status-light" id="statusLight"></div>
+                <p class="status-text" id="statusText">Checking status...</p>
+                <button class="edit-toggle-btn" onclick="toggleEditStatus()">✏️ Edit Status</button>
+            </div>
+            
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon">👥</div>
+                    <div class="stat-label">Players Grinding</div>
+                    <div class="stat-value" id="playerCount">0/15</div>
                 </div>
                 
-                <div class="stats-grid">
-                    <div class="stat-card">
-                        <div class="stat-icon">👥</div>
-                        <div class="stat-info">
-                            <p class="stat-label">Players Grinding</p>
-                            <p class="stat-value" id="playerCount">Loading...</p>
-                        </div>
-                    </div>
-                    
-                    <div class="stat-card">
-                        <div class="stat-icon">🎮</div>
-                        <div class="stat-info">
-                            <p class="stat-label">Server Type</p>
-                            <p class="stat-value">Mega Grind</p>
-                        </div>
-                    </div>
-                    
-                    <div class="stat-card">
-                        <div class="stat-icon">✨</div>
-                        <div class="stat-info">
-                            <p class="stat-label">Vibe</p>
-                            <p class="stat-value">Cutecore</p>
-                        </div>
-                    </div>
-
-                    <div class="stat-card">
-                        <div class="stat-icon">💺</div>
-                        <div class="stat-info">
-                            <p class="stat-label">Seats Available</p>
-                            <p class="stat-value" id="seatsAvailable">Loading...</p>
-                        </div>
-                    </div>
+                <div class="stat-card">
+                    <div class="stat-icon">💺</div>
+                    <div class="stat-label">Seats Available</div>
+                    <div class="stat-value" id="seatsAvailable">15</div>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-icon">🎮</div>
+                    <div class="stat-label">Server Type</div>
+                    <div class="stat-value">Mega Grind</div>
                 </div>
             </div>
         </section>
 
         <section id="rules" class="rules-section">
             <h2>🌟 The AFK Corner - Server Rules 🌟</h2>
-            <p class="rules-intro">Welcome to Berry Bun! We're part of The AFK Corner community. Please follow these essential rules to keep our grinding sessions smooth and fun for everyone!</p>
             
             <div class="rules-grid">
                 <div class="rule-card">
                     <div class="rule-number">01</div>
                     <h3>NO TRADING AT ALL</h3>
-                    <p>Trading is strictly not allowed in grind servers. Save that for the main game!</p>
+                    <p>Trading is strictly not allowed in grind servers!</p>
                 </div>
-
                 <div class="rule-card">
                     <div class="rule-number">02</div>
                     <h3>NO AFK BABIES</h3>
-                    <p>No AFK babies allowed — actively playing is okay, but AFK babies will result in a kick!</p>
+                    <p>No AFK babies allowed — actively playing is okay!</p>
                 </div>
-
                 <div class="rule-card">
                     <div class="rule-number">03</div>
                     <h3>ONE FAMILY ONLY</h3>
-                    <p>Everyone must be in ONE family — do not create multiple families or try to separate.</p>
+                    <p>Everyone must be in ONE family!</p>
                 </div>
-
                 <div class="rule-card">
                     <div class="rule-number">04</div>
                     <h3>NO ORANGE TASKS</h3>
-                    <p>No orange tasks — short breaks for Pet Shop/Golden Apples are okay, but no tasks!</p>
+                    <p>No orange tasks allowed!</p>
                 </div>
-
                 <div class="rule-card">
                     <div class="rule-number">05</div>
                     <h3>AFK = SEATED ONLY</h3>
-                    <p>If you're AFK, you MUST be sitting in a proper seat. Standing AFK is not allowed!</p>
+                    <p>Must sit in a proper seat!</p>
                 </div>
-
                 <div class="rule-card">
                     <div class="rule-number">06</div>
                     <h3>MOBILE USERS</h3>
-                    <p>Mobile users: change your name to "AFK" and make sure you follow all seating rules!</p>
+                    <p>Change name to "AFK"!</p>
                 </div>
-
                 <div class="rule-card">
                     <div class="rule-number">07</div>
                     <h3>GRIND HOUSE LOCATION</h3>
-                    <p>The grind house is always on the main plot near the Hospital & Nursery. Head there first!</p>
+                    <p>Main plot near Hospital & Nursery!</p>
                 </div>
-
                 <div class="rule-card">
                     <div class="rule-number">08</div>
                     <h3>NO HIDING</h3>
-                    <p>No hiding behind trees, treadmills or anywhere you shouldn't be. Use proper seats only!</p>
+                    <p>Use proper seats only!</p>
                 </div>
-
                 <div class="rule-card">
                     <div class="rule-number">09</div>
                     <h3>WAIT FOR SEATS</h3>
-                    <p>Join the family and wait for an open seat before grinding. Don't force your way in!</p>
+                    <p>Don't force your way in!</p>
                 </div>
-
                 <div class="rule-card">
                     <div class="rule-number">10</div>
                     <h3>BE KIND & RESPECTFUL</h3>
-                    <p>Treat everyone with kindness and positivity. We're all here to have fun and grind together!</p>
+                    <p>Treat everyone with kindness!</p>
                 </div>
-
                 <div class="rule-card">
                     <div class="rule-number">11</div>
                     <h3>NO HARASSMENT</h3>
-                    <p>No harassment, bullying, or drama of any kind. Keep it friendly and chill!</p>
+                    <p>Keep it friendly and chill!</p>
                 </div>
-
                 <div class="rule-card">
                     <div class="rule-number">12</div>
                     <h3>RESPECT THE HOST</h3>
-                    <p>Respect the host and follow their instructions at all times. They keep things running!</p>
+                    <p>Follow their instructions!</p>
                 </div>
-
                 <div class="rule-card">
                     <div class="rule-number">13</div>
                     <h3>CONSEQUENCES</h3>
-                    <p>Rule breaking may result in a warning, kick, or ban. Keep it chill! 🎀</p>
+                    <p>Warning, kick, or ban! 🎀</p>
                 </div>
             </div>
 
             <div class="how-to-grind">
                 <h3>📋 How to Join & Start Grinding</h3>
                 <ol class="steps">
-                    <li><strong>Find an Open Server</strong> - Look for the green "Open" badge below</li>
-                    <li><strong>Click Join Server</strong> - You'll be taken directly to the Roblox server</li>
-                    <li><strong>Travel to the Grind House</strong> - It's on the main plot near Hospital & Nursery</li>
-                    <li><strong>Accept the Family Invite</strong> - Wait for an active grinder to invite you (set family to "Everyone")</li>
-                    <li><strong>Find an Available Seat</strong> - Make sure a seat is open before going AFK!</li>
+                    <li><strong>Find an Open Server</strong> - Look for the green badge!</li>
+                    <li><strong>Click Join Server</strong> - You'll go directly to Roblox!</li>
+                    <li><strong>Travel to Grind House</strong> - Main plot near Hospital & Nursery!</li>
+                    <li><strong>Accept Family Invite</strong> - Set family permissions to "Everyone"!</li>
+                    <li><strong>Find Available Seat</strong> - Make sure a seat is open before AFK!</li>
                 </ol>
 
                 <div class="pro-tips">
                     <h4>✨ Pro Tips:</h4>
                     <ul>
-                        <li>✓ Set your Adopt Me family permissions to "Everyone"</li>
-                        <li>✓ Follow host instructions for smoothest experience</li>
-                        <li>✓ Grab healing apples near the hospital!</li>
+                        <li>✓ Set Adopt Me family to "Everyone"</li>
+                        <li>✓ Follow host instructions</li>
+                        <li>✓ Grab healing apples near hospital!</li>
                         <li>✓ Be patient — good vibes only! 🌸</li>
                     </ul>
                 </div>
@@ -223,16 +713,18 @@
 
         <section id="join" class="join-section">
             <h2>Join Berry Bun</h2>
-            <p class="join-description">Ready to join our cute grinding community? Let's get that XP! 🌟</p>
+            <p>Ready to grind? Let's get that XP! 🌟</p>
             
-            <div class="join-button-container">
-                <a href="https://www.roblox.com/share?code=4da6e629966d834fa3ed440be3fb2e4b&type=Server" 
-                   class="join-btn" target="_blank">
-                    🎀 Join Server Now 🎀
-                </a>
+            <div class="announcement-box">
+                <div class="announcement-text" id="announcement">📢 🎀 Server is OPEN! Join now! ✨</div>
+                <button class="edit-btn" onclick="toggleEditAnnouncement()">✏️ Edit Announcement</button>
             </div>
             
-            <p class="join-note">or copy the server code:</p>
+            <a href="https://www.roblox.com/share?code=4da6e629966d834fa3ed440be3fb2e4b&type=Server" class="join-btn" target="_blank">
+                🎀 Join Server Now 🎀
+            </a>
+            
+            <p style="margin-top: 2rem; color: #9b7b9e;">or copy the server code:</p>
             <div class="code-container">
                 <code>4da6e629966d834fa3ed440be3fb2e4b</code>
                 <button class="copy-btn" onclick="copyCode()">📋 Copy</button>
@@ -245,6 +737,194 @@
         </footer>
     </div>
 
-    <script src="script.js?v=2.0"></script>
+    <script>
+        const VALID_USERNAME = "Rio";
+        const VALID_PASSWORD = "stefanshi";
+
+        let serverStatusData = {
+            status: 'open',
+            players: 8,
+            maxPlayers: 15,
+            timeValue: '',
+            timeUnit: 'hours'
+        };
+
+        let announcementData = {
+            message: '🎀 Server is OPEN! Join now! ✨'
+        };
+
+        // Login
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+
+            if (username === VALID_USERNAME && password === VALID_PASSWORD) {
+                sessionStorage.setItem('berryBunLoggedIn', 'true');
+                loadApp();
+            } else {
+                const errorMsg = document.getElementById('loginError');
+                errorMsg.textContent = '❌ Incorrect! Try Rio / stefanshi';
+                errorMsg.classList.add('show');
+                setTimeout(() => errorMsg.classList.remove('show'), 3000);
+            }
+        });
+
+        function loadApp() {
+            document.getElementById('loginModal').style.display = 'none';
+            document.getElementById('mainContent').style.display = 'block';
+            loadServerStatus();
+            loadAnnouncement();
+            updateDisplay();
+        }
+
+        function loadServerStatus() {
+            const saved = localStorage.getItem('serverStatusData');
+            if (saved) serverStatusData = JSON.parse(saved);
+        }
+
+        function saveServerStatus() {
+            localStorage.setItem('serverStatusData', JSON.stringify(serverStatusData));
+        }
+
+        function loadAnnouncement() {
+            const saved = localStorage.getItem('announcementData');
+            if (saved) announcementData = JSON.parse(saved);
+        }
+
+        function saveAnnouncement() {
+            localStorage.setItem('announcementData', JSON.stringify(announcementData));
+        }
+
+        function updateDisplay() {
+            const statusLight = document.getElementById('statusLight');
+            const statusText = document.getElementById('statusText');
+            const playerCount = document.getElementById('playerCount');
+            const seatsAvailable = document.getElementById('seatsAvailable');
+            const announcement = document.getElementById('announcement');
+
+            statusLight.classList.remove('closed');
+            if (serverStatusData.status === 'open') {
+                statusLight.style.background = '#4CAF50';
+                statusText.innerHTML = '🟢 Server is OPEN ✨ 🌸';
+            } else if (serverStatusData.status === 'closed') {
+                statusLight.style.background = '#f44336';
+                statusText.innerHTML = '🔴 Server is CLOSED 💔';
+            } else if (serverStatusData.status === 'opening') {
+                statusLight.style.background = '#FFC107';
+                const timeStr = serverStatusData.timeValue ? `${serverStatusData.timeValue} ${serverStatusData.timeUnit}` : 'soon';
+                statusText.innerHTML = `🟡 Opening in ${timeStr}... ⏰`;
+            }
+
+            const seats = serverStatusData.maxPlayers - serverStatusData.players;
+            playerCount.textContent = `${serverStatusData.players}/${serverStatusData.maxPlayers} 👥`;
+            seatsAvailable.textContent = `${seats} 💺`;
+            announcement.textContent = '📢 ' + announcementData.message;
+        }
+
+        function toggleEditStatus() {
+            const statusCard = document.querySelector('.status-card');
+            if (statusCard.classList.contains('edit-mode')) {
+                statusCard.classList.remove('edit-mode');
+                updateDisplay();
+            } else {
+                statusCard.classList.add('edit-mode');
+                statusCard.innerHTML = `
+                    <div class="edit-status-container">
+                        <h3 style="color: #d4478a; margin-bottom: 1rem;">⚙️ Edit Server Status 🎀</h3>
+                        <div class="edit-status-group">
+                            <label style="color: #d4478a; font-weight: 600;">Status:</label>
+                            <select id="statusSelect">
+                                <option value="open" ${serverStatusData.status === 'open' ? 'selected' : ''}>🟢 OPEN</option>
+                                <option value="closed" ${serverStatusData.status === 'closed' ? 'selected' : ''}>🔴 CLOSED</option>
+                                <option value="opening" ${serverStatusData.status === 'opening' ? 'selected' : ''}>🟡 OPENING IN...</option>
+                            </select>
+                        </div>
+                        <div id="timeInputs" style="display: ${serverStatusData.status === 'opening' ? 'flex' : 'none'};" class="edit-status-group">
+                            <input type="number" id="timeValue" min="1" value="${serverStatusData.timeValue}" placeholder="Enter number">
+                            <select id="timeUnit">
+                                <option value="hours" ${serverStatusData.timeUnit === 'hours' ? 'selected' : ''}>Hours ⏰</option>
+                                <option value="days" ${serverStatusData.timeUnit === 'days' ? 'selected' : ''}>Days 📅</option>
+                                <option value="minutes" ${serverStatusData.timeUnit === 'minutes' ? 'selected' : ''}>Minutes ⏱️</option>
+                            </select>
+                        </div>
+                        <div class="edit-status-group">
+                            <input type="number" id="playerInput" min="0" max="100" value="${serverStatusData.players}" placeholder="Players">
+                            <input type="number" id="maxPlayerInput" min="1" max="200" value="${serverStatusData.maxPlayers}" placeholder="Max">
+                        </div>
+                        <button class="save-status-btn" onclick="saveEditStatus()">💾 Save Status</button>
+                    </div>
+                `;
+                document.getElementById('statusSelect').addEventListener('change', function() {
+                    document.getElementById('timeInputs').style.display = this.value === 'opening' ? 'flex' : 'none';
+                });
+            }
+        }
+
+        function saveEditStatus() {
+            serverStatusData.status = document.getElementById('statusSelect').value;
+            serverStatusData.timeValue = document.getElementById('timeValue').value;
+            serverStatusData.timeUnit = document.getElementById('timeUnit').value;
+            serverStatusData.players = parseInt(document.getElementById('playerInput').value) || 0;
+            serverStatusData.maxPlayers = parseInt(document.getElementById('maxPlayerInput').value) || 15;
+            saveServerStatus();
+            document.querySelector('.status-card').classList.remove('edit-mode');
+            updateDisplay();
+        }
+
+        function toggleEditAnnouncement() {
+            const announcementBox = document.querySelector('.announcement-box');
+            if (announcementBox.classList.contains('edit-mode')) {
+                announcementBox.classList.remove('edit-mode');
+                updateDisplay();
+            } else {
+                announcementBox.classList.add('edit-mode');
+                announcementBox.innerHTML = `
+                    <div class="edit-announcement-form">
+                        <label style="color: #d4478a; font-weight: 600;">Edit Message:</label>
+                        <textarea id="announcementInput">${announcementData.message}</textarea>
+                        <div class="edit-announcement-buttons">
+                            <button class="save-btn" onclick="saveEditAnnouncement()">💾 Save</button>
+                            <button class="cancel-btn" onclick="cancelEditAnnouncement()">❌ Cancel</button>
+                        </div>
+                        <p style="margin-top: 1rem; color: #9b7b9e; font-size: 0.9rem;">Use emojis: 🎀 🌸 ✨ 💖 🐰 🍓 🫐 ♡ ෆ ✩ ✿ ★</p>
+                    </div>
+                `;
+            }
+        }
+
+        function saveEditAnnouncement() {
+            announcementData.message = document.getElementById('announcementInput').value || '🎀 Server is OPEN! Join now! ✨';
+            saveAnnouncement();
+            document.querySelector('.announcement-box').classList.remove('edit-mode');
+            updateDisplay();
+        }
+
+        function cancelEditAnnouncement() {
+            document.querySelector('.announcement-box').classList.remove('edit-mode');
+            updateDisplay();
+        }
+
+        function copyCode() {
+            navigator.clipboard.writeText('4da6e629966d834fa3ed440be3fb2e4b').then(() => {
+                const btn = document.querySelector('.copy-btn');
+                const original = btn.textContent;
+                btn.textContent = '✅ Copied!';
+                setTimeout(() => btn.textContent = original, 2000);
+            });
+        }
+
+        function handleLogout() {
+            sessionStorage.removeItem('berryBunLoggedIn');
+            location.reload();
+        }
+
+        // Check if logged in on load
+        window.addEventListener('load', function() {
+            if (sessionStorage.getItem('berryBunLoggedIn')) {
+                loadApp();
+            }
+        });
+    </script>
 </body>
 </html>
